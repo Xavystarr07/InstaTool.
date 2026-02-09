@@ -1,0 +1,33 @@
+1. The Core Logic (The "Brain")
+The app performs a Set Difference calculation. In mathematical terms, it identifies users in Set A (People you follow) who are not present in Set B (People who follow you).
+
+The Problem: Instagram does not provide a "Who doesn't follow me back" button.
+
+The Solution: Your code manually extracts both lists, compares the usernames, and generates a third list of "Non-Followers."
+
+2. Phase One: The Collection (collect.js)
+This script is a Web Scraper built with Playwright.
+
+Human Emulation: Instead of using an API (which Instagram blocks), it opens a real Chrome window. It waits for you to log in, proving to Instagram that a human is present.
+
+The Scroll Loop: It navigates to your "Followers" and "Following" modals. Because Instagram uses Dynamic Loading (it only shows ~10 names at a time), the code runs a loop that scrolls the window, waits for new names to load, and "scrapes" the text until it reaches the bottom.
+
+Data Persistence: Once finished, it saves this data as a .json file in your Downloads. This allows the app to work "Offline" in the next phase without re-scanning.
+
+3. Phase Two: The Unfollower (unfollow_from_file.js)
+This script is an Action Bot.
+
+File Analysis: It reads the JSON file created in Phase One.
+
+Safety Buffering: This is the most important part of the code. It doesn't unfollow everyone at once (which would get you banned). It uses Math.random() to create "Jitter" (delays between 5 and 12 seconds) between every click.
+
+DOM Interaction: It searches for the specific username, clicks the "Following" button, and then confirms the "Unfollow" popup.
+
+4. The Interface (app.js & index.html)
+This is the Control Layer that ties it all together.
+
+Express Server: Your app.js acts as a middleman. When you click a button on the website, it sends a command to the server to trigger the Node.js scripts.
+
+Visual Feedback: The dashboard uses Asynchronous Fetch. This means the website stays "alive" and shows you "Robot Active..." status while the script is running in the background.
+
+Error Handling: We added logic to detect if the browser is closed manually. If the robot "dies," the server catches that error and sends a clean message back to the dashboard instead of crashing.
