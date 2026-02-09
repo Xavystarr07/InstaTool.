@@ -1,46 +1,48 @@
-\# InstaTool 2026 🚀
+README.md
+InstaTool 🚀
 
-
-
-A simple, human-simulated automation tool to find and unfollow accounts that don't follow you back on Instagram.
-
-
+A modern, web-based automation dashboard to find and unfollow accounts that don't follow you back on Instagram. This tool uses human-simulated behavior to minimize detection.
 
 ✨ Features
 
-\- Human-Style Capture: Scans followers/following by simulating scrolls.
+Centralized Dashboard: Manage collection and unfollowing from a sleek, glassmorphism UI.
 
-\- 2026 Compatible: Works with the latest "Friends" and "Following" label updates.
+Human-Style Capture: Scans followers and following lists by simulating real scrolling behavior.
 
-\- Safe Execution: Includes random delays to mimic real user behavior.
+Modern Detection: Compatible with 2026 "Friends" and "Following" label updates.
 
+Error Protection: Gracefully handles manual browser closures and connection drops.
 
+Safe Execution: Built-in random delays (5-10s) to mimic real user interactions.
 
 🛠️ Setup
 
-1\. Clone this repo.
+Clone the repository:
 
-2\. Install dependencies:
+Bash
+git clone https://github.com/YOUR_USERNAME/InstaTool.git
+cd InstaTool
+Install dependencies:
 
-&nbsp;  ```bash
-
-&nbsp;  npm install playwright
-
-&nbsp;  npx playwright install chromium
-
+Bash
+npm install
+npx playwright install chromium
 🚀 Usage
 
-Find Non-Followers: Run node collect.js. Log in and go to your profile.
+Launch the Dashboard:
 
+Bash
+node app.js
+Find Non-Followers: Click "1. Find Non-Followers". Log in manually and navigate to your profile. The script will automatically scrape your lists and save a JSON report to your Downloads folder.
 
-
-Unfollow: Run node unfollow\_from\_file.js. Log in and let the script run.
-
-
+Unfollow: Click "2. Start Unfollowing". The script will load your latest report and begin the automated unfollow process with safety delays.
 
 ⚠️ Disclaimer
 
-Automating Instagram can result in account flags. Use sparingly (limit to 50 unfollows per hour).
+Automating social media platforms can result in account flags or temporary blocks.
 
+Use sparingly (recommended limit: 50 unfollows per hour).
 
+This tool is for educational purposes only.
 
+Built for the 2026 Instagram UI.
