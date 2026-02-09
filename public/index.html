@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaTool Pro 2026</title>
+    <style>
+        :root {
+            --primary: #833ab4;
+            --gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #0f0f0f;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 20s infinite alternate;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        .container {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            max-width: 400px;
+            width: 90%;
+            z-index: 10;
+        }
+
+        h1 { margin: 0 0 0.5rem 0; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5rem; }
+        p.subtitle { color: #aaa; margin-bottom: 2.5rem; font-size: 0.95rem; letter-spacing: 1px; }
+
+        .btn {
+            background: var(--gradient);
+            border: none;
+            padding: 16px;
+            color: white;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(220, 39, 67, 0.3); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Status Coloring */
+        .status-success { color: #4ade80; border-color: rgba(74, 222, 128, 0.3); }
+        .status-error { color: #ff6b6b; border-color: rgba(255, 107, 107, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="blob"></div>
+    
+    <div class="container">
+        <h1>InstaTool</h1>
+        <p class="subtitle">AUTOMATION DASHBOARD</p>
+
+        <button class="btn action-btn" onclick="runTask('/run-collect', this)">1. Find Non-Followers</button>
+        <button class="btn btn-secondary action-btn" onclick="runTask('/run-unfollow', this)">2. Start Unfollowing</button>
+
+        <div id="status" class="status-box"></div>
+        
+        <div id="refresh" style="display:none; margin-top:20px;">
+            <a href="javascript:location.reload()" style="color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.7rem;">↺ Restart Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        async function runTask(endpoint, btnElement) {
+            const status = document.getElementById('status');
+            const refresh = document.getElementById('refresh');
+            const allBtns = document.querySelectorAll('.action-btn');
+
+            // Reset UI
+            allBtns.forEach(b => b.disabled = true);
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "ROBOT ACTIVE...";
+            
+            status.className = "status-box"; // Clear previous status classes
+            status.style.display = "block";
+            status.innerHTML = "📡 Initializing Playwright...";
+            refresh.style.display = "block";
+
+            try {
+                const response = await fetch(endpoint);
+                const text = await response.text();
+
+                if (!response.ok) {
+                    // Handle server errors (Manual closures, etc)
+                    status.classList.add("status-error");
+                    status.innerHTML = "⚠️ <b>Task Stopped:</b> " ;
+                } else {
+                    // Handle Success
+                    status.classList.add("status-success");
+                    status.innerHTML = "✅ " + text;
+                    alert(text);
+                }
+            } catch (err) {
+                // Handle total connection failure
+                status.classList.add("status-error");
+                status.innerHTML = "❌ Server Error. Is node running?";
+            } finally {
+                allBtns.forEach(b => b.disabled = false);
+                btnElement.innerText = originalText;
+            }
+        }
+    </script>
+</body>
+</html>
